@@ -1,10 +1,10 @@
 # genssl
 
-
 docker pull furriouswarrior/genssl
 
 
 1. Running acme.sh as a docker daemon, so that it can handle the renewal cronjob automatically.
+
 docker run --rm  -itd  \
 -v /etc/acme:/acme.sh  \
   --net=host \
@@ -26,6 +26,7 @@ CF_Email="email@gmail.com"
 
 RSA 2048 key
 docker  exec  genssl   --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf
+
 ECC 384 key
 docker  exec  genssl   --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf --keylength ec-384
 
@@ -33,9 +34,9 @@ FOR NGINX
         # RSA certificates
         ssl_certificate /etc/acme/example.com/fullchain.cer;
         ssl_certificate_key /etc/acme/example.com/example.com.key;
-#       ssl_trusted_certificate ;
+       #ssl_trusted_certificate ;
 
         # ECDSA certificates
         ssl_certificate /etc/acme/example.com_ecc/fullchain.cer;
         ssl_certificate_key /etc/acme/example.com_ecc/example.com.key;
-#        ssl_trusted_certificate ;
+       #ssl_trusted_certificate ;
