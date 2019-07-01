@@ -6,7 +6,7 @@ RUN apk update -f \
   && apk --no-cache add -f \
   openssl \
   coreutils \
-    bind-tools \
+  bind-tools \
   curl \
   socat \
   nano \
