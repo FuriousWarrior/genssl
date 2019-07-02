@@ -1,36 +1,59 @@
-# genssl
+# genssl - Модифицированный образ acme.sh c Московской TimeZone и редактором nano.
 
-docker pull furriouswarrior/genssl
+***
+Получить можно командой ``docker pull furriouswarrior/genssl``
+
+или собрать самому `` docker build -t genssl . `` из корня папки.
+***
 
 
-1. Running acme.sh as a docker daemon, so that it can handle the renewal cronjob automatically.
+1. Быстрый запуск  acme.sh as в режиме демона, с автоматическим проблемнием сертификатов через крон.
 
-docker run --rm  -itd  \
+`docker run --rm  -itd  \
 -v /etc/acme:/acme.sh  \
-  --net=host \
-  --name=genssl \
-  furriouswarrior/genssl daemon
+--net=host \
+--name=genssl \
+furriouswarrior/genssl daemon `
+
+При данном режиме запуска файлы контейнера будут в папке /etc/acme хоста!
   
-  2. Then you can just use docker exec to execute any acme.sh commands.
-docker  exec  genssl --help
-docker  exec  genssl  --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf --keylength ec-384
+2. Основные acme.sh команды.
+Вывести все команды
+`` docker  exec  genssl --help ``
 
-ECC SSL
-docker  exec  genssl  -e CF_Key="dfdfdfdfdfdfdfdfdf" -e CF_Email="email@gmail.com" --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf --keylength ec-384
+Получение сертификата стандартным способом, будет задействован 80 порт, данный вариант не особо интересен когда можно использовать api регистраторов или dns сервисов по типу cloudflare.
+`` acme.sh --issue --standalone -d example.com -d www.example.com -d cp.example.com ``
 
-docker  exec -it genssl /bin/ash
-nano /root/.acme.sh/dnsapi/dns_cf.sh
 
+3. Зайти  в контейнер можно командой
+`` docker  exec -it genssl /bin/ash ``
+
+Если хотим изменить ключ cloudflare
+``nano /root/.acme.sh/dnsapi/dns_cf.sh``
+
+Меняем на свой api ключ и почту
 CF_Key="dfdfdfdfdfdfdfdfdf"
 CF_Email="email@gmail.com" 
 
-RSA 2048 key
+
+4. Получение WildCard сертификатов
+``RSA 2048 key
 docker  exec  genssl   --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf
 
-ECC 384 key
-docker  exec  genssl   --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf --keylength ec-384
+ECC 256 key
+docker  exec  genssl   --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf --keylength ec-256
 
-FOR NGINX
+
+docker  exec  genssl  --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf --keylength ec-256 ``
+
+--dns dns_cf использовать api cloudflare
+
+Так жен мы можем при 1 выдаче явно указать переменные cloudflare.
+`` docker  exec  genssl  -e CF_Key="dfdfdfdfdfdfdfdfdf" -e CF_Email="email@gmail.com" --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf --keylength ec-256 ``
+
+
+В  NGINX указываем пути до секртификатов. Далее nginx -t и nginx -s reload
+```
         # RSA certificates
         ssl_certificate /etc/acme/example.com/fullchain.cer;
         ssl_certificate_key /etc/acme/example.com/example.com.key;
@@ -39,4 +62,4 @@ FOR NGINX
         # ECDSA certificates
         ssl_certificate /etc/acme/example.com_ecc/fullchain.cer;
         ssl_certificate_key /etc/acme/example.com_ecc/example.com.key;
-       #ssl_trusted_certificate ;
+       #ssl_trusted_certificate ; ```
