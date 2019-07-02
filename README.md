@@ -9,10 +9,10 @@
 
 ### 1. Быстрый запуск  acme.sh as в режиме демона, с автоматическим проблемнием сертификатов через крон.
 ``
-   docker run --rm  -itd  \
-  -v /etc/acme:/acme.sh  \
-  --net=host \
-  --name=genssl \
+   docker run --rm  -itd  \ <br>
+  -v /etc/acme:/acme.sh  \ <br>
+  --net=host \ <br>
+  --name=genssl \ <br>
   furriouswarrior/genssl daemon``
 
 При данном режиме запуска файлы контейнера будут в папке /etc/acme хоста!
@@ -48,7 +48,7 @@ ECC 256 key
 
 --dns dns_cf использовать api cloudflare
 
-Так жен мы можем при 1 выдаче явно указать переменные cloudflare.
+Так же мы можем при 1 выдаче явно указать переменные cloudflare. <br>
 `` docker  exec  genssl  -e CF_Key="dfdfdfdfdfdfdfdfdf" -e CF_Email="email@gmail.com" --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf --keylength ec-256 ``
 
 
