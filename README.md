@@ -4,6 +4,8 @@
 Получить можно командой ``docker pull furriouswarrior/genssl``
 
 или собрать самому `` docker build -t genssl . `` из корня папки.
+
+Подробно про скрипт почитать можно на странице проекта https://github.com/Neilpang/acme.sh
 ***
 
 
