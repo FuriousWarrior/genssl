@@ -9,10 +9,10 @@
 
 ### 1. Быстрый запуск  acme.sh as в режиме демона, с автоматическим проблемнием сертификатов через крон.
 ```
-   docker run --rm  -itd  \ <br>
-  -v /etc/acme:/acme.sh  \ <br>
+   docker run --rm  -itd  \
+  -v /etc/acme:/acme.sh  \ 
   --net=host \
-  --name=genssl \ <br>
+  --name=genssl \
   furriouswarrior/genssl daemon
  ``` 
 
