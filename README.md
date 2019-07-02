@@ -52,9 +52,6 @@ RSA 2048 key
 ECC 256 key
 ``docker  exec  genssl   --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf --keylength ec-256
 ``
-``docker  exec  genssl  --issue -d example.com  -d '*.example.com'  --accountemail "email@gmail.com" --dns dns_cf --keylength ec-256
-``
-
 --dns dns_cf использовать api cloudflare
 
 Так же мы можем при 1 выдаче явно указать переменные cloudflare. <br>
